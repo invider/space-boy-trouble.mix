@@ -1,0 +1,11 @@
+# collider.jam
+.meta.cache
+dist
+*.out
+*.tar
+*.tgz
+*.zip
+
+# macOS
+*.DS_Store
+
