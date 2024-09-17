@@ -3,7 +3,7 @@ function clearCache() {
 
     if (typeof(Storage) === 'undefined') return
     try {
-        window.localStorage.removeItem(env.cfg.storage)
+        window.localStorage.removeItem(env.cfg.storageKey)
     } catch(e) {
         log.err(e)
     }
@@ -12,7 +12,7 @@ function clearCache() {
 function loadCache() {
     if (typeof(Storage) === 'undefined') return {}
     try {
-        const cache = window.localStorage.getItem(env.cfg.storage)
+        const cache = window.localStorage.getItem(env.cfg.storageKey)
         return JSON.parse(cache) || {}
 
     } catch (e) {
@@ -24,7 +24,7 @@ function loadCache() {
 function saveCache(cache) {
     if (typeof(Storage) === 'undefined') return
     try {
-        window.localStorage.setItem(env.cfg.storage, JSON.stringify(cache))
+        window.localStorage.setItem(env.cfg.storageKey, JSON.stringify(cache))
 
     } catch (e) {
         log.err(e)

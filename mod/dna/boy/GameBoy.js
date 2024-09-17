@@ -23,9 +23,13 @@ class GameBoy extends LabFrame {
     init() {
         this.touch('screen', {
             onAttached: function(e) {
+                e.$   = this.$
                 e.ctx = this.ctx
+                augment(e, dna.trait.hidable)
             }
         })
+        this.spawn(dna.boy.ScreenController)
+
         this.screen.spawn(dna.screen.Title, {
             name: 'mainTitle',
 
@@ -36,15 +40,43 @@ class GameBoy extends LabFrame {
                 this.ctx.font = env.style.font
                 //this.ctx.font = env.style.titleFont
                 this.ctx.textAlign = 'left'
-                this.ctx.textBaseline = 'middle'
+                this.ctx.textBaseline = 'top'
 
                 this.ctx.fillStyle = env.style.color.c2
                 this.ctx.fillText('Space Boy is in Trouble!', 30, 20)
-            }
+            },
+
+            activate(action) {
+                log('#' + action)
+                this.$.screenController.show('secondTitle')
+            },
         })
+
+        this.screen.spawn(dna.screen.Title, {
+            name: 'secondTitle',
+
+            draw: function() {
+                this.ctx.font = env.style.font
+                //this.ctx.font = env.style.titleFont
+                this.ctx.textAlign = 'left'
+                this.ctx.textBaseline = 'top'
+
+                this.ctx.fillStyle = env.style.color.c2
+                this.ctx.fillText('The Second Message', 0, 0)
+            },
+
+            activate(action) {
+                log('#' + action)
+                this.$.screenController.show('mainTitle')
+            },
+        })
+
+        this.screenController.hideAll()
+        this.screenController.show('mainTitle')
     }
 
     onAttached(e) {
+        e.$   = this
         e.ctx = this.ctx
     }
 

@@ -1,29 +1,28 @@
-
 function handleControl(e) {
     switch(e.code) {
         case 'Minus':
-            _$.env.tune.scale *= (1 - _$.env.tune.scaleFactor)
+            env.tune.scale *= (1 - _$.env.tune.scaleFactor)
             break
 
         case 'Equal':
-            _$.env.tune.scale *= (1 + _$.env.tune.scaleFactor)
+            env.tune.scale *= (1 + _$.env.tune.scaleFactor)
             break
 
         case 'Escape':
             // TODO reset the game?
             break
         case 'F8':
-            _$.lib.img.screenshot('enceladus-dockyards')
+            lib.img.screenshot(env.msg.screenshotTitle)
             break
     }
 }
 
 function keyDown(e) {
 
-    const action = env.bind.keyMap[e.code]
+    const activation = env.bind.keyMap[e.code]
 
-    if (action) {
-        lab.control.player.act(action.id, 0)
+    if (activation) {
+        lab.control.controller.act(activation.action, activation.controller)
     } else {
         handleControl(e)
     }
