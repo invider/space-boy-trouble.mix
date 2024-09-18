@@ -5,8 +5,10 @@ function init() {
 
 function show() {
     this.hidden = false
+    this.paused = false
 }
 
 function hide() {
     this.hidden = true
+    this.paused = true
 }

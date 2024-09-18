@@ -5,6 +5,7 @@ class GameBoy extends LabFrame {
     constructor(st) {
         super( extend({
             name: 'gameboy' + (++id),
+            pal: new dna.boy.Palette(),
             framebuffer: document.createElement('canvas'),
             fw: env.cfg.width,
             fh: env.cfg.height,
@@ -67,9 +68,22 @@ class GameBoy extends LabFrame {
 
             activate(action) {
                 log('#' + action)
-                this.$.screenController.show('mainTitle')
+                this.$.screenController.show('roll')
             },
         })
+
+        this.screen.spawn(dna.screen.Roll, {
+            name: 'roll',
+            icolor: 2,
+            text: `Data update,
+            Roll is in progress...
+            Press any key to exit...
+            `,
+            activate(action) {
+                log('#' + action)
+                this.$.screenController.show('mainTitle')
+            },
+        }),
 
         this.screenController.hideAll()
         this.screenController.show('mainTitle')
