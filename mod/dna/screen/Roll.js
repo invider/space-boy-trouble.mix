@@ -3,12 +3,12 @@ class Roll {
     constructor(st) {
         extend(this, {
             dx:  0,
-            dy: -16,
+            dy: -12,
             stepX:  0,
             stepY:  10,
             startX: 0,
             startY: 144 + 8,
-            stopY:  -24,
+            stopY:  -16,
             align: 'left',
             icolor: 1,
             loop:   true,
@@ -18,6 +18,13 @@ class Roll {
 
     roll(txt) {
         this.lines = txt.split('\n')
+        this.x = this.startX
+        this.y = this.startY
+    }
+
+    show() {
+        this.hidden = false
+        this.paused = false
         this.x = this.startX
         this.y = this.startY
     }

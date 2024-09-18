@@ -1,33 +1,52 @@
+/*
+ * Menu Widget
+ *
+ * Use as a separate screen or in combination with other widgets.
+ *
+ * Create with *items* array or use _selectFrom(st)_ to define the items and event hooks:
+ *
+ * ```
+ * menu.selectFrom({
+ *     items: [
+ *         'Simple Item',
+ *         'Another Simple Item',
+ *          { section: true, title: 'Section One'}, // declare a section - visible, but not selectable
+ *         'Next Item',
+ *         ['from', 'list', 'selection'],
+ *         // an option item
+ *         {
+ *         
+ *         }
+ *     ],
+ * })
+ * ```
+ */
 const ACTIVE = 1
 const DISABLED = 0
 
 const df = {
-    x: 0,
-    y: 0,
-    w: 80,
-    h: 40,
-    step: 10,
+    x:       0,
+    y:       0,
+    w:       80,
+    h:       40,
+    border:  2,
+    step:    10,
+    gap:     2,
+    padding: 1,
+    IDLE:    20,
+
     current: 0,
-    border: 2,
-    IDLE: 20,
-}
-
-function isSwitch(item) {
-    return isArray(item)
-}
-
-function isOption(item) {
-    return (isObj(item) && item.option)
 }
 
 class Menu {
 
     constructor(st) {
         this.syncTheme()
-        augment(this, df)
-        augment(this, st)
+        extend(this, df, st)
+        this.selectFrom()
     }
 
+    // TODO get config from the current game boy
     syncTheme() {
         // need to setup manually,
         // since colors are not available on df{} creation
@@ -42,17 +61,40 @@ class Menu {
         }
     }
 
+    isComplexItem(item) {
+        return (isObj(item))
+    }
+
+    isSection(item) {
+        return (this.isComplexItem(item) && item.section)
+    }
+
+    isOption(item) {
+        return (this.isComplexItem(item) && item.option)
+    }
+
+    isSwitch(item) {
+        return isArray(item)
+    }
+
+    itemTitle(item) {
+        if (isString(item)) return item
+        if (this.isSwitch(item)) return item.title || ''
+        if (this.isOption(item) || this.isComplexItem(item)) return item.title
+        return ''
+    }
+
     show() {
         this.hidden = false
         this.state = ACTIVE
         this.lastTouch = Date.now()
-        lab.control.player.bindAll(this)
+        //lab.control.player.bindAll(this)
     }
 
     hide() {
         this.hidden = true
         this.state = DISABLED
-        lab.control.player.unbindAll(this)
+        //lab.control.controller.unbindAll(this)
     }
 
     selectFrom(st) {
@@ -60,7 +102,7 @@ class Menu {
         if (!this.preservePos) this.current = 0
 
         this.items.forEach(item => {
-            if (isSwitch(item) || isOption(item)) {
+            if (this.isSwitch(item) || this.isOption(item)) {
                 if (!item.current) item.current = 0
                 if (item.load) item.load()
             }
@@ -90,7 +132,7 @@ class Menu {
         } else {
             // landed
             if (this.onMove) this.onMove(item)
-            sfx.play('select', env.mixer.level.select)
+            //sfx.play('select', env.mixer.level.select)
         }
         
     }
@@ -106,24 +148,24 @@ class Menu {
         } else {
             // landed
             if (this.onMove) this.onMove(item)
-            sfx.play('select', env.mixer.level.select)
+            //sfx.play('select', env.mixer.level.select)
         }
     }
 
     left() {
         if (this.hidden) return
         const item = this.currentItem()
-        if (isSwitch(item)) {
+        if (this.isSwitch(item)) {
             item.current --
             if (item.current < 0) item.current = item.length - 1
             if (this.onSwitch) this.onSwitch(item, this.current)
-            sfx.play('apply', env.mixer.level.switch)
-        } else if (isOption(item)) {
+            //sfx.play('apply', env.mixer.level.switch)
+        } else if (this.isOption(item)) {
             item.current --
             if (item.current < 0) item.current = item.options.length - 1
             if (this.onSwitch) this.onSwitch(item, this.current)
             if (item.sync) item.sync()
-            sfx.play('apply', env.mixer.level.switch)
+            //sfx.play('apply', env.mixer.level.switch)
         }
         if (this.onMove) this.onMove(item)
     }
@@ -131,29 +173,29 @@ class Menu {
     right() {
         if (this.hidden) return
         const item = this.currentItem()
-        if (isSwitch(item)) {
+        if (this.isSwitch(item)) {
             item.current ++
             if (item.current >= item.length) item.current = 0
             if (this.onSwitch) this.onSwitch(item, this.current)
-            sfx.play('apply', env.mixer.level.switch)
-        } else if (isOption(item)) {
+            //sfx.play('apply', env.mixer.level.switch)
+        } else if (this.isOption(item)) {
             item.current ++
             if (item.current >= item.options.length) item.current = 0
             if (this.onSwitch) this.onSwitch(item, this.current)
             if (item.sync) item.sync()
-            sfx.play('apply', env.mixer.level.switch)
+            //sfx.play('apply', env.mixer.level.switch)
         }
         if (this.onMove) this.onMove(item)
     }
 
     select() {
         const item = this.currentItem()
-        if (isSwitch(item) || isOption(item)) {
+        if (this.isSwitch(item) || this.isOption(item)) {
             this.right()
         } else {
             if (this.onSelect) {
-                this.onSelect(item)
-                sfx.play('use', env.mixer.level.apply)
+                this.onSelect(item, this.current)
+                //sfx.play('use', env.mixer.level.apply)
             }
         }
     }
@@ -162,7 +204,7 @@ class Menu {
         if (this.onBack) {
             this.onBack( this.currentItem() )
         }
-        sfx.play('noisy', env.mixer.level.apply)
+        //sfx.play('noisy', env.mixer.level.apply)
     }
 
     activate(action) {
@@ -184,56 +226,65 @@ class Menu {
 
     draw() {
         if (!this.items) return
-        const n = this.items.length
-        const cx = this.x + floor(this.w/2)
-        const cy = this.y + floor(this.h/2)
+        const ctx = this.ctx
+        const N = this.items.length
+        const border = this.border
+        const centerX = floor(this.x)
+        const centerY = floor(this.y)
+        const originX = floor(this.x - this.w * .5)
+        const w = this.w
+        const h = this.h = N * this.step + 2*border - this.gap
+        const originY = floor(centerY - h * .5)
 
-        alignCenter()
-        baseTop()
-        font(env.style.font)
+        let by = originY + border
 
-        const b = this.border
-        const x = cx
-        const rx = this.x
-        const rw = this.w
-        const h = n * this.step + 2*b
-        let y = cy - floor(h/2)
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.font = env.style.font
 
         if (this.showBackground) {
-            fill(this.background)
-            rect(rx, y-2*b, rw, h)
+            ctx.fillStyle = this.background
+            ctx.fillRect(originX, originY, w, h)
         }
 
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < N; i++) {
             let hidden = false
             let active = true
             let disabled = false
             let item = this.items[i]
-            if (isArray(item)) {
-                if (item.hidden) hidden = true
-                if (item.disabled) disabled = true
-                item = '< ' + item[item.current] + ' >'
-            } else if (isObj(item)) {
-                if (item.section) {
-                    active = false
-                    item = item.title
-                } else if (item.option) {
-                    item = item.title + ': ' + item.options[item.current]
-                }
+            let title = item
+            if (this.isSwitch(item)) {
+                // selection item
+                hidden = !!item.hidden
+                disabled = !!item.disabled
+                title = '< ' + item[item.current] + ' >'
+            } else if (this.isSection(item)) {
+                active = false
+                title = item.title
+            } else if (this.isOption(item)) {
+                title = item.title + ': ' + item.options[item.current]
+            } else if (this.isComplexItem(item)) {
+                hidden = !!item.hidden
+                disabled = !!item.disabled
+                title = item.title
             }
 
             if (!hidden) {
-                // backline
-                if (i === this.current) fill(this.color.bacolor)
-                else fill(this.color.bcolor)
-                rect(rx+b, y-1, rw-2*b, this.step-2)
+                // select the frame style
+                if (i === this.current) ctx.fillStyle = this.color.bacolor
+                else ctx.fillStyle = this.color.bcolor
+                // item frame
+                ctx.fillRect(originX+border, by, w-2*border, this.step-this.gap - this.padding)
 
-                if (!active) fill(this.color.scolor)
-                else if (disabled) fill(this.color.dcolor)
-                else if (i === this.current) fill(this.color.acolor)
-                else fill(this.color.main)
-                text(item, x, y)
-                y += this.step
+                // select the text style
+                if (!active) ctx.fillStyle = this.color.scolor
+                else if (disabled) ctx.fillStyle = this.color.dcolor
+                else if (i === this.current) ctx.fillStyle = this.color.acolor
+                else ctx.fillStyle = this.color.main
+                // item text
+                ctx.fillText(title, centerX, floor(by + (this.step - this.gap) * .5))
+
+                by += this.step
             }
         }
     }
@@ -259,4 +310,5 @@ class Menu {
             this.lastTouch = Date.now()
         }
     }
+
 }

@@ -26,7 +26,7 @@ class GameBoy extends LabFrame {
             onAttached: function(e) {
                 e.$   = this.$
                 e.ctx = this.ctx
-                augment(e, dna.trait.hidable)
+                supplement(e, dna.trait.hidable)
             }
         })
         this.spawn(dna.boy.ScreenController)
@@ -75,18 +75,72 @@ class GameBoy extends LabFrame {
         this.screen.spawn(dna.screen.Roll, {
             name: 'roll',
             icolor: 2,
-            text: `Data update,
-            Roll is in progress...
-            Press any key to exit...
-            `,
+            text: $.todo,
             activate(action) {
                 log('#' + action)
-                this.$.screenController.show('mainTitle')
+                this.$.screenController.show('menu')
             },
-        }),
+        })
+
+        this.screen.spawn(dna.hud.Menu, {
+            name: 'menu',
+            showBackground: false,
+            x:   env.cfg.width  * .5,
+            y:   env.cfg.height * .5,
+            w:   env.cfg.width  * .75,
+            items: [
+                // simple items
+                'Simple Item',
+                'Another Simple Item',
+                // section item - visible, but not selectable
+                { section: true, title: 'Section One'},
+                // switch item
+                ['from', 'list', 'selection'],
+
+                // another section
+                { section: true, title: 'Another Section'}, 
+                // option item
+                {
+                    option: true,
+                    title: 'music',
+                    options: ['on', 'off', 'random']
+                },
+                // complex section
+                { section: true, title: 'Complex Section'}, 
+                // complex item
+                {
+                    title: 'Complex Item',
+                },
+                // complex hidden item
+                {
+                    hidden: true,
+                    title: 'Hidden Item',
+                },
+                // complex disabled item
+                {
+                    disabled: true,
+                    title: 'A Disabled Item',
+                },
+                'The Last Item',
+
+            ],
+            onSelect: function(item, index) {
+                log(`selected #${index}: ${this.itemTitle(item)}`)
+                //this.$.screenController.show('mainTitle')
+            },
+            onMove: function(item) {
+                if (isObj(item) && (item.option || item.switch)) {
+                    log('moved: #' + item.current)
+                    console.dir(item)
+                }
+            },
+            onIdle: function() {
+                log('idle')
+            },
+        })
 
         this.screenController.hideAll()
-        this.screenController.show('mainTitle')
+        this.screenController.show('roll')
     }
 
     onAttached(e) {
