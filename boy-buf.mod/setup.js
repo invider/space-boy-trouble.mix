@@ -1,6 +1,6 @@
 module.exports = function() {
     lib.debug.configure()
-    lib.util.loadConfig()
+    //lib.util.loadConfig()
 
     // patches
     _$.boy = _ // set the gameboy mix shortcut ??? We want to have multiple gameboys

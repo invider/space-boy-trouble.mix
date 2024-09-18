@@ -34,6 +34,7 @@ function onIdle() {
 }
 
 function setup() {
+    /*
     const W = 70
     const B = floor((ctx.width-W)/2)
     const menu = this.__.spawn(dna.hud.Menu, {
@@ -65,6 +66,7 @@ function setup() {
 
         },
     })
+    */
 }
 
 function gameConfig() {

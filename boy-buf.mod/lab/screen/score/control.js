@@ -18,6 +18,7 @@ function onSelect(item) {
 }
 
 function setup() {
+    /*
     const W = 70
     const B = floor((ctx.width-W)/2)
 
@@ -53,6 +54,7 @@ function setup() {
             this.menu.hide()
         },
     })
+    */
 }
 
 function keep(time) {

@@ -1,3 +1,4 @@
+======  TODO  ======
 > theme selection
 > framebuffer transitions
 > initialize audio context

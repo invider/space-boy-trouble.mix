@@ -1,5 +1,6 @@
 
 function draw() {
+    /*
     const color = env.style.color
 
     const s = 12
@@ -20,4 +21,5 @@ function draw() {
 
     blocky()
     res.pods.draw(8, x-2*s, y, 2*s, 2*s)
+    */
 }

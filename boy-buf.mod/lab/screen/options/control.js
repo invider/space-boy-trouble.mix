@@ -55,6 +55,7 @@ function onBack(item) {
 }
 
 function setup() {
+    /*
     const W = 90
     const B = floor((ctx.width-W)/2)
     const menu = this.__.spawn(dna.hud.Menu, {
@@ -91,6 +92,7 @@ function setup() {
             lab.control.player.unbindAll(menu)
         },
     })
+    */
 }
 
 function mainMenu() {

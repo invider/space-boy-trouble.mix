@@ -1,3 +1,3 @@
 function start() {
-    trap('title')
+    //trap('title')
 }
