@@ -151,7 +151,7 @@ class Menu {
         if (this.current >= this.items.length) this.current = 0
 
         const item = this.items[this.current]
-        if (this.isSection() || item.disabled || item.hidden) {
+        if (this.isSection(item) || item.disabled || item.hidden) {
             this.next()
         } else {
             // landed
@@ -167,7 +167,7 @@ class Menu {
         if (this.current < 0) this.current = this.items.length - 1
 
         const item = this.items[this.current]
-        if (this.isSection() || item.disabled || item.hidden) {
+        if (this.isSection(item) || item.disabled || item.hidden) {
             this.prev()
         } else {
             // landed

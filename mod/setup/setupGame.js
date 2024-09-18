@@ -5,6 +5,8 @@ function setupGame() {
     // DEBUG lets create a sample gameboy
     lab.spawn(dna.boy.GameBoy, {})
 
+    lab.touch('space')
+
     // fade from the bootloader
     lab.vfx.transit({
         fadein:  env.style.bootFader.in,
