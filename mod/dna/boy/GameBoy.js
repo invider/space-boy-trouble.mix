@@ -103,13 +103,20 @@ class GameBoy extends LabFrame {
                 {
                     option: true,
                     title: 'music',
-                    options: ['on', 'off', 'random']
+                    options: ['on', 'off', 'random'],
+                    sync: function() {
+                        console.dir(this)
+                        log('syncing music to: ' + this.options[this.current])
+                    },
                 },
                 // complex section
                 { section: true, title: 'Complex Section'}, 
                 // complex item
                 {
                     title: 'Complex Item',
+                    onSelect: function() {
+                        log('complex item is selected!')
+                    },
                 },
                 // complex hidden item
                 {
@@ -127,8 +134,20 @@ class GameBoy extends LabFrame {
             onSelect: function(item, index) {
                 log(`selected #${index}: ${this.itemTitle(item)}`)
                 //this.$.screenController.show('mainTitle')
+                switch(index) {
+                    case 0:
+                        log('A very simple case here!')
+                        break
+                    case  10:
+                        log('The last one!')
+                        this.items[8].hidden = !this.items[8].hidden
+                        break
+                }
             },
-            onMove: function(item) {
+            onMove: function(item, index) {
+                log(`moved to #${index}: ${this.itemTitle(item)}`)
+            },
+            onSwitch: function(item) {
                 if (isObj(item) && (item.option || item.switch)) {
                     log('moved: #' + item.current)
                     console.dir(item)

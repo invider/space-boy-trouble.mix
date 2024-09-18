@@ -6,19 +6,49 @@
  * Create with *items* array or use _selectFrom(st)_ to define the items and event hooks:
  *
  * ```
- * menu.selectFrom({
- *     items: [
- *         'Simple Item',
- *         'Another Simple Item',
- *          { section: true, title: 'Section One'}, // declare a section - visible, but not selectable
- *         'Next Item',
- *         ['from', 'list', 'selection'],
- *         // an option item
- *         {
- *         
- *         }
- *     ],
- * })
+ *  items: [
+ *      // simple items
+ *      'Simple Item',
+ *      'Another Simple Item',
+ *      // section item - visible, but not selectable
+ *      { section: true, title: 'Section One'},
+ *      // switch item
+ *      ['from', 'list', 'selection'],
+ *
+ *      // another section
+ *      { section: true, title: 'Another Section'}, 
+ *      // option item
+ *      {
+ *          option: true,
+ *          title: 'music',
+ *          options: ['on', 'off', 'random'],
+ *          sync: function() {
+ *              console.dir(this)
+ *              log('syncing music to: ' + this.options[this.current])
+ *          },
+ *      },
+ *      // complex section
+ *      { section: true, title: 'Complex Section'}, 
+ *      // complex item
+ *      {
+ *          title: 'Complex Item',
+ *          onSelect: function() {
+ *              log('complex item is selected!')
+ *          },
+ *      },
+ *      // complex hidden item
+ *      {
+ *          hidden: true,
+ *          title: 'Hidden Item',
+ *      },
+ *      // complex disabled item
+ *      {
+ *          disabled: true,
+ *          title: 'A Disabled Item',
+ *      },
+ *      'The Last Item',
+ *
+ *  ],
  * ```
  */
 const ACTIVE = 1
@@ -127,11 +157,11 @@ class Menu {
         if (this.current >= this.items.length) this.current = 0
 
         const item = this.items[this.current]
-        if (isObj(item) && (item.section || item.disabled)) {
+        if (this.isSection() || item.disabled || item.hidden) {
             this.next()
         } else {
             // landed
-            if (this.onMove) this.onMove(item)
+            if (this.onMove) this.onMove(item, this.current)
             //sfx.play('select', env.mixer.level.select)
         }
         
@@ -143,11 +173,11 @@ class Menu {
         if (this.current < 0) this.current = this.items.length - 1
 
         const item = this.items[this.current]
-        if (isObj(item) && (item.section || item.disabled)) {
+        if (this.isSection() || item.disabled || item.hidden) {
             this.prev()
         } else {
             // landed
-            if (this.onMove) this.onMove(item)
+            if (this.onMove) this.onMove(item, this.current)
             //sfx.play('select', env.mixer.level.select)
         }
     }
@@ -159,6 +189,7 @@ class Menu {
             item.current --
             if (item.current < 0) item.current = item.length - 1
             if (this.onSwitch) this.onSwitch(item, this.current)
+            if (item.sync) item.sync()
             //sfx.play('apply', env.mixer.level.switch)
         } else if (this.isOption(item)) {
             item.current --
@@ -167,7 +198,7 @@ class Menu {
             if (item.sync) item.sync()
             //sfx.play('apply', env.mixer.level.switch)
         }
-        if (this.onMove) this.onMove(item)
+        if (this.onMove) this.onMove(item, this.current)
     }
 
     right() {
@@ -177,6 +208,7 @@ class Menu {
             item.current ++
             if (item.current >= item.length) item.current = 0
             if (this.onSwitch) this.onSwitch(item, this.current)
+            if (item.sync) item.sync()
             //sfx.play('apply', env.mixer.level.switch)
         } else if (this.isOption(item)) {
             item.current ++
@@ -185,7 +217,7 @@ class Menu {
             if (item.sync) item.sync()
             //sfx.play('apply', env.mixer.level.switch)
         }
-        if (this.onMove) this.onMove(item)
+        if (this.onMove) this.onMove(item, this.current)
     }
 
     select() {
@@ -193,7 +225,9 @@ class Menu {
         if (this.isSwitch(item) || this.isOption(item)) {
             this.right()
         } else {
-            if (this.onSelect) {
+            if (item.onSelect) {
+                item.onSelect(this)
+            } else if (this.onSelect) {
                 this.onSelect(item, this.current)
                 //sfx.play('use', env.mixer.level.apply)
             }
