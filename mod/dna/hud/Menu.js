@@ -54,41 +54,35 @@
 const ACTIVE = 1
 const DISABLED = 0
 
-const df = {
-    x:       0,
-    y:       0,
-    w:       80,
-    h:       40,
-    border:  2,
-    step:    10,
-    gap:     2,
-    padding: 1,
-    IDLE:    20,
-
-    current: 0,
-}
-
 class Menu {
 
     constructor(st) {
-        this.syncTheme()
-        extend(this, df, st)
-        this.selectFrom()
-    }
+        extend(this, {
+            x:       0,
+            y:       0,
+            w:       80,
+            h:       40,
+            border:  2,
+            step:    10,
+            gap:     2,
+            padding: 1,
+            IDLE:    20,
 
-    // TODO get config from the current game boy
-    syncTheme() {
-        // need to setup manually,
-        // since colors are not available on df{} creation
-        this.background = env.style.color.c1
-        this.color = {
-            main: env.style.color.c3, 
-            bcolor: env.style.color.c0, 
-            scolor: env.style.color.c2,
-            acolor: env.style.color.c0, 
-            dcolor: env.style.color.c1,
-            bacolor: env.style.color.c3, 
-        }
+            current: 0,
+
+            icolor: {
+                background:    1,
+
+                frame:         0, 
+                activeFrame:   3,
+
+                item:          3, 
+                currentItem:   0,
+                disabledItem:  1,
+                separator:     2,
+            },
+        }, st)
+        this.selectFrom()
     }
 
     isComplexItem(item) {
@@ -261,6 +255,8 @@ class Menu {
     draw() {
         if (!this.items) return
         const ctx = this.ctx
+        const pal = this.$.pal
+        const icolor = this.icolor
         const N = this.items.length
         const border = this.border
         const centerX = floor(this.x)
@@ -277,7 +273,7 @@ class Menu {
         ctx.font = env.style.font
 
         if (this.showBackground) {
-            ctx.fillStyle = this.background
+            ctx.fillStyle = pal.toRGBA(icolor.background)
             ctx.fillRect(originX, originY, w, h)
         }
 
@@ -305,16 +301,16 @@ class Menu {
 
             if (!hidden) {
                 // select the frame style
-                if (i === this.current) ctx.fillStyle = this.color.bacolor
-                else ctx.fillStyle = this.color.bcolor
+                if (i === this.current) ctx.fillStyle = pal.toRGBA(icolor.activeFrame)
+                else ctx.fillStyle = pal.toRGBA(icolor.frame)
                 // item frame
                 ctx.fillRect(originX+border, by, w-2*border, this.step-this.gap - this.padding)
 
                 // select the text style
-                if (!active) ctx.fillStyle = this.color.scolor
-                else if (disabled) ctx.fillStyle = this.color.dcolor
-                else if (i === this.current) ctx.fillStyle = this.color.acolor
-                else ctx.fillStyle = this.color.main
+                if (!active) ctx.fillStyle = pal.toRGBA(icolor.separator)
+                else if (disabled) ctx.fillStyle = pal.toRGBA(icolor.disabledItem)
+                else if (i === this.current) ctx.fillStyle = pal.toRGBA(icolor.currentItem)
+                else ctx.fillStyle = pal.toRGBA(icolor.item)
                 // item text
                 ctx.fillText(title, centerX, floor(by + (this.step - this.gap) * .5))
 
