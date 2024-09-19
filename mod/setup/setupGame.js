@@ -1,6 +1,7 @@
 function setupGame() {
     lab.background = env.style.border
     lib.util.hideCursor()
+    lib.adjust.tiles()
 
     // DEBUG lets create a sample gameboy
     lab.spawn(dna.boy.GameBoy, {})

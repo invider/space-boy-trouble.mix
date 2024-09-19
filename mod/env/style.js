@@ -19,6 +19,8 @@ const style = {
 
     border: '#252123',
 
+    originalPalette: 'kirokaze',
+    /*
     color: {
         // kirokaze - default palette
         c0: '#332c50',
@@ -104,4 +106,5 @@ const style = {
             c3: '#e2e6cf',
         }
     },
+    */
 }

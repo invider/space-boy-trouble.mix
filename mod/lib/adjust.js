@@ -9,7 +9,7 @@ function rgbComponents(c) {
 }
 
 function splitPaletteToComponents(p) {
-    return Object.values(p).map((c) => rgbComponents(c))
+    return p.map((c) => rgbComponents(c))
 }
 
 function matchRGB(source, i, rgb) {
@@ -51,28 +51,32 @@ function mapColors(img, sourcePalette, targetPalette) {
     return fixedImage
 }
 
-function remap() {
-    const original = env.style.color
+function tiles() {
+    const original = env.palette[env.style.originalPalette]
     const originalRGB = splitPaletteToComponents(original)
 
-    const theme = {}
-    const titles = {}
-    res.attach(theme, 'theme')
-    res.attach(titles, 'titles')
+    //const theme = {}
+    //const titles = {}
+    //res.attach(theme, 'theme')
+    //res.attach(titles, 'titles')
+    const theme = res.touch('theme')
 
-    Object.entries(env.style.palette).forEach(([palName, pal]) => {
+    env.palette._ls.forEach(pal => {
         const palRGB = splitPaletteToComponents(pal)
-        theme[palName] = ( mapColors(res.pods.img, originalRGB, palRGB) )
-        titles[palName] = ( mapColors(res.title, originalRGB, palRGB) )
+        const palRes = theme.touch(pal.name)
+        palRes.attach( mapColors(res.tiles.img, originalRGB, palRGB), 'tiles' )
+        res.img._ls.forEach(img => {
+            palRes.attach( mapColors(img, originalRGB, palRGB), img.name )
+        })
     })
     // include original color set to available styles
-    env.style.palette[DEFAULT] = original
-    res.theme[DEFAULT] = res.pods.img
-    res.titles[DEFAULT] = res.title
-
-    setTheme(env.opt.theme || DEFAULT)
+    //env.style.palette[DEFAULT] = original
+    //res.theme[DEFAULT] = res.pods.img
+    //res.titles[DEFAULT] = res.title
+    //setTheme(env.opt.theme || DEFAULT)
 }
 
+/*
 function setTheme(name) {
     const color = env.style.palette[name]
     const tiles = res.theme[name]
@@ -89,3 +93,4 @@ function setTheme(name) {
         if (node.syncTheme) node.syncTheme()
     })
 }
+*/

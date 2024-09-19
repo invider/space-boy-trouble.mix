@@ -35,7 +35,7 @@ class GameBoy extends LabFrame {
             name: 'mainTitle',
 
             draw: function() {
-                this.ctx.fillStyle = env.style.color.c1
+                this.ctx.fillStyle = this.$.pal.toRGBA(1)
                 this.ctx.fillRect(16, 16, 32, 32)
 
                 this.ctx.font = env.style.font
@@ -43,7 +43,7 @@ class GameBoy extends LabFrame {
                 this.ctx.textAlign = 'left'
                 this.ctx.textBaseline = 'top'
 
-                this.ctx.fillStyle = env.style.color.c2
+                this.ctx.fillStyle = this.$.pal.toRGBA(2)
                 this.ctx.fillText('Space Boy is in Trouble!', 30, 20)
             },
 
@@ -62,7 +62,7 @@ class GameBoy extends LabFrame {
                 this.ctx.textAlign = 'left'
                 this.ctx.textBaseline = 'top'
 
-                this.ctx.fillStyle = env.style.color.c2
+                this.ctx.fillStyle = this.$.pal.toRGBA(2)
                 this.ctx.fillText('The Second Message', 0, 0)
             },
 
@@ -124,12 +124,9 @@ class GameBoy extends LabFrame {
         e.ctx = this.ctx
     }
 
-    toRGBA(icolor) {
-    }
-
     draw() {
         // this.ctx.clearRect(0, 0, this.fw, this.fh)
-        this.ctx.fillStyle = env.style.color.c0
+        this.ctx.fillStyle = this.pal.toRGBA(0)
         this.ctx.fillRect(0, 0, this.fw, this.fh)
 
         // draw to the framebuffer
