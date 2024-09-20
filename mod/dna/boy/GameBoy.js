@@ -7,18 +7,28 @@ class GameBoy extends LabFrame {
             name: 'gameboy' + (++id),
             pal: new dna.boy.Palette(),
             framebuffer: document.createElement('canvas'),
+            pixelbuffer: document.createElement('canvas'),
             fw: env.cfg.width,
             fh: env.cfg.height,
             itheme: 0,
         }, st) )
 
-        this.framebuffer.width = this.fw
+        this.framebuffer.width  = this.fw
         this.framebuffer.height = this.fh 
+        this.pixelbuffer.width  = this.fw
+        this.pixelbuffer.height = this.fh
 
         //this.ctx = this.framebuffer.getContext('2d', { alpha: false })
-        this.ctx = this.framebuffer.getContext('2d')
+        const ctx = this.ctx = this.framebuffer.getContext('2d')
+        this.pctx = this.pixelbuffer.getContext('2d', {
+            willReadFrequently: true,
+        })
         //this.ctx.width = env.cfg.width
         //this.ctx.height = env.cfg.height
+        this.tileset = res.tiles.clone()
+        this.tileset.drawImage = function() {
+            ctx.drawImage.apply(ctx, arguments)
+        }
     }
 
     init() {
@@ -125,23 +135,37 @@ class GameBoy extends LabFrame {
     }
 
     draw() {
-        // this.ctx.clearRect(0, 0, this.fw, this.fh)
+        // fill the framebuffer with background color
         this.ctx.fillStyle = this.pal.toRGBA(0)
         this.ctx.fillRect(0, 0, this.fw, this.fh)
-
-        // draw to the framebuffer
+        // clear the pixelbuffer
+        this.pctx.clearRect(0, 0, this.fw, this.fh)
+        this.pdata = this.pctx.getImageData(0, 0, this.fw, this.fh)
+        // draw to the framebuffer & pixelbuffer
         super.draw()
 
         // TODO post-drawing vfx like transitions etc...
         // ...
 
-        // render the framebuffer
+        // render the framebuffer and the pixelbuffer on top of it
         // TODO introduce alpha value to place with the gameboy screen fade in/out effects
         const w = this.fw * env.tune.scale // TODO get the scaling from the layout controller
         const h = this.fh * env.tune.scale
-        const hb = (ctx.width - w) * .5
-        const vb = (ctx.height - h) * .5
+        const x = (ctx.width  - w) * .5
+        const y = (ctx.height - h) * .5
         blocky()
-        image(this.framebuffer, hb, vb, w, h)
+        image(this.framebuffer, x, y, w, h)
+
+        let py = 16
+        for (let px = 0; px < 160; px ++) {
+            const sh = (py * 160 + px) * 4
+            this.pdata.data[sh]   = 255
+            this.pdata.data[sh+1] = 255
+            this.pdata.data[sh+2] = 255
+            this.pdata.data[sh+3] = 255
+        }
+
+        this.pctx.putImageData(this.pdata, 0, 0)
+        image(this.pixelbuffer, x, y, w, h)
     }
 }
