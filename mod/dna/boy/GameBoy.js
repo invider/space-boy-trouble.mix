@@ -12,6 +12,7 @@ class GameBoy extends LabFrame {
             fh: env.cfg.height,
             itheme: 0,
         }, st) )
+        extend(this, dna.trait.drawable)
 
         this.framebuffer.width  = this.fw
         this.framebuffer.height = this.fh 
@@ -164,6 +165,8 @@ class GameBoy extends LabFrame {
             this.pdata.data[sh+2] = 255
             this.pdata.data[sh+3] = 255
         }
+        this.drawLine(20, 20, 25, 40, 1)
+        this.drawLine(20, 20, 10, 10, 1)
 
         this.pctx.putImageData(this.pdata, 0, 0)
         image(this.pixelbuffer, x, y, w, h)
