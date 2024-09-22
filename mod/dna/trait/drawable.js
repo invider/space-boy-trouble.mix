@@ -1,10 +1,12 @@
 function putPixel(x, y, icolor) {
-    x = floor(x - this.bx + this.hw)
-    y = floor(y - this.by + this.hh)
-    if (x < 0 || x >= this.fw || y < 0 || y >= this.fh) return
-    const b = (y * env.cfg.width + x) * 4
+    // rotate first
+    let sx = x * cos(this.br) - y * sin(this.br)
+    let sy = x * sin(this.br) + y * cos(this.br)
+    sx = floor(sx - this.bx + this.hw)
+    sy = floor(sy - this.by + this.hh)
+    if (sx < 0 || sx >= this.fw || sy < 0 || sy >= this.fh) return
+    const b = (sy * env.cfg.width + sx) * 4
     const c = this.pal.toColorArray(icolor || 0)
-    // TODO get color array by index
     this.pdata.data[b]   = c[0]
     this.pdata.data[b+1] = c[1]
     this.pdata.data[b+2] = c[2]

@@ -143,6 +143,10 @@ class GameBoy extends LabFrame {
         this.by = by
     }
 
+    rotate(br) {
+        this.br = br
+    }
+
     draw() {
         // fill the framebuffer with background color
         this.ctx.fillStyle = this.pal.toRGBA(0)
