@@ -1,9 +1,9 @@
 function putPixel(x, y, icolor) {
     // rotate first
-    let sx = x * cos(this.br) - y * sin(this.br)
-    let sy = x * sin(this.br) + y * cos(this.br)
-    sx = floor(sx - this.bx + this.hw)
-    sy = floor(sy - this.by + this.hh)
+    let sx = floor(x - this.bx + this.hw)
+    let sy = floor(y - this.by + this.hh)
+    //sx = sx * cos(this.br) - sy * sin(this.br)
+    //sy = sx * sin(this.br) + sy * cos(this.br)
     if (sx < 0 || sx >= this.fw || sy < 0 || sy >= this.fh) return
     const b = (sy * env.cfg.width + sx) * 4
     const c = this.pal.toColorArray(icolor || 0)

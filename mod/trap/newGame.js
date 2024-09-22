@@ -9,12 +9,13 @@ function newGame() {
     const systemZero = lab.space.spawn(dna.space.System, {
         name: 'systemZero',
     })
-    systemZero.spawn(dna.space.Ship, {
+    const ship = systemZero.spawn(dna.space.Ship, {
         name: 'kobra',
         x:    0,
         y:    0,
     })
+    lab.gameboy1.port.bind(ship)
 
-    lab.gameboy1.screen.port.jumpToSystem(systemZero)
+    lab.gameboy1.port.jumpToSystem(systemZero)
 
 }

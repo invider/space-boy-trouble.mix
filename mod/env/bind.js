@@ -10,10 +10,6 @@ const A      = 5
 const B      = 6
 const X      = 7
 const Y      = 8
-const L1     = 9
-const R1     = 10
-const L2     = 11
-const R2     = 12
 const MENU   = 13
 const SELECT = 14
 
@@ -23,8 +19,8 @@ const fixed = {
     escape:         'Escape',
     backspace:      'Backspace',
     startCheating:  'Backslash',
-
     pause:          'KeyP',
+
     //releaseAll:     'End',
     menu:           'Escape',
     zoomIn:         'Equal',
@@ -46,28 +42,21 @@ const actions = [
     'B',
     'X',
     'Y',
-    'L1',
-    'R1',
-    'L2',
-    'R2',
     'MENU',
     'SELECT',
 ]
 const keyboard = [
     [ 'KeyW', 'KeyA', 'KeyS', 'KeyD',
-        'Space', 'AltRight', 'KeyE', 'KeyQ',
-        'KeyR', 'KeyF', 'KeyT', 'KeyG',
-        'KeyX', 'KeyZ'
+       'Comma', 'Period', 'KeyM', 'Slash',
+        'KeyQ', 'KeyE'
     ],
     [ 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight',
-        'ControlRight', 'ShiftRight', 'End', 'Home',
-        'PageUp', 'PageDown', 'Insert', 'Delete',
-        'Backspace', 'Backslash',
+        'KeyX', 'KeyZ', 'KeyC', 'ShiftLeft',
+        'Delete', 'End',
     ],
     [ 'KeyK', 'KeyH', 'KeyJ', 'KeyL',
-        'KeyN', 'KeyB', 'KeyY', 'KeyU',
-        '', '', '', '',
-        '', '',
+        'KeyN', 'KeyB', 'KeyG', 'KeyV',
+        'KeyU', 'KeyI',
     ],
 ]
 
