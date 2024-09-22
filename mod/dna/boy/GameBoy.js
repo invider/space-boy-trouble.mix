@@ -167,6 +167,7 @@ class GameBoy extends LabFrame {
         }
         this.drawLine(20, 20, 25, 40, 1)
         this.drawLine(20, 20, 10, 10, 1)
+        this.drawCircle(40, 40, 10, 1)
 
         this.pctx.putImageData(this.pdata, 0, 0)
         image(this.pixelbuffer, x, y, w, h)

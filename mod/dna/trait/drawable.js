@@ -44,3 +44,38 @@ function drawLine(x1, y1, x2, y2, icolor) {
         }
     }
 }
+
+function drawCirclePoints(x, y, xc, yc, icolor) {
+    this.putPixel(xc + x, yc + y, icolor)
+    this.putPixel(xc + y, yc + x, icolor)
+    this.putPixel(xc + y, yc - x, icolor)
+    this.putPixel(xc + x, yc - y, icolor)
+    this.putPixel(xc - x, yc - y, icolor)
+    this.putPixel(xc - y, yc - x, icolor)
+    this.putPixel(xc - y, yc + x, icolor)
+    this.putPixel(xc - x, yc + y, icolor)
+}
+
+function drawCircle(xc, yc, r, icolor) {
+    let x = 0,
+        y = r,
+        d = 1 - r,
+        delta1 = 3,
+        delta2 = -2*r + 5
+    this.drawCirclePoints(x, y, xc, yc, icolor)
+    while(y > x) {
+        if (d < 0) {
+            d += delta1
+            delta1 += 2
+            delta2 += 2
+            x++
+        } else {
+            d += delta2
+            delta1 += 2
+            delta2 += 4
+            x++
+            y--
+        }
+        this.drawCirclePoints(x, y, xc, yc, icolor)
+    }
+}
