@@ -20,8 +20,8 @@ class Camera {
         ctx.save()
         ctx.translate(this.x + env.cfg.width * .5,
             this.y + env.cfg.height * .5 + .5)
+        this.$.translate(this.x, this.y)
         this.system.draw(ctx, this.$)
-
         ctx.restore()
     }
 

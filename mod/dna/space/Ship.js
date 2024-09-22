@@ -17,34 +17,37 @@ class Ship {
     }
 
     draw(ctx, $) {
-        ctx.save()
-        ctx.imageSmoothingEnabled = false
-        ctx.translate(floor(this.x) + .5, floor(this.y) + .5)
-        ctx.rotate(-this.dir)
+        //ctx.save()
+        //ctx.imageSmoothingEnabled = false
+        //ctx.translate(floor(this.x) + .5, floor(this.y) + .5)
+        //ctx.rotate(-this.dir)
 
         //$.tileset.draw(1, -this.r, -this.r, this.r2, this.r2)
 
-        ctx.strokeStyle = $.pal.toRGBA(1)
+        //ctx.strokeStyle = $.pal.toRGBA(1)
+        //ctx.lineWidth = 1
+        //ctx.beginPath()
+        //ctx.arc(0, 0, this.r, 0, PI2)
+        //ctx.stroke()
+        $.drawCircle(this.x, this.y, this.r, 1)
 
-        ctx.lineWidth = 1
-        ctx.beginPath()
-        ctx.arc(0, 0, this.r, 0, PI2)
-        ctx.stroke()
+        const dx = cos(this.dir),
+              dy = sin(this.dir)
+        $.drawLine(this.x, this.x, this.x, this.y-this.r * 1.2, 1)
+        //ctx.moveTo(0, 0)
+        //ctx.lineTo(0, -this.r * 1.2)
+        //ctx.stroke()
 
-        //const dx = cos(this.dir),
-        //      dy = sin(this.dir)
-        ctx.moveTo(0, 0)
-        ctx.lineTo(0, -this.r * 1.2)
-        ctx.stroke()
-
+        $.drawLine(this.x-3, this.y, this.x-3, this.y-this.r * 1.2, 1)
+        $.drawLine(this.x+3, this.y, this.x+3, this.y-this.r * 1.2, 1)
+        /*
         ctx.moveTo(-3, 0)
         ctx.lineTo(-3, -this.r * 1.2)
         ctx.stroke()
         ctx.moveTo( 3, 0)
         ctx.lineTo( 3, -this.r * 1.2)
         ctx.stroke()
-
-
-        ctx.restore()
+        */
+        //ctx.restore()
     }
 }

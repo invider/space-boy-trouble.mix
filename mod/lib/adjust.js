@@ -1,17 +1,5 @@
 const DEFAULT = 'default'
 
-function rgbComponents(c) {
-    if (c.startsWith('#')) c = c.substring(1)
-    const r = parseInt(c.substring(0, 2), 16)
-    const g = parseInt(c.substring(2, 4), 16)
-    const b = parseInt(c.substring(4, 6), 16)
-    return [r, g, b]
-}
-
-function splitPaletteToComponents(p) {
-    return p.map((c) => rgbComponents(c))
-}
-
 function matchRGB(source, i, rgb) {
     return (
         source[i] === rgb[0]
@@ -53,7 +41,7 @@ function mapColors(img, sourcePalette, targetPalette) {
 
 function tiles() {
     const original = env.palette[env.style.originalPalette]
-    const originalRGB = splitPaletteToComponents(original)
+    const originalRGB = lib.color.splitPaletteToComponents(original)
 
     //const theme = {}
     //const titles = {}
@@ -62,7 +50,7 @@ function tiles() {
     const theme = res.touch('theme')
 
     env.palette._ls.forEach(pal => {
-        const palRGB = splitPaletteToComponents(pal)
+        const palRGB = lib.color.splitPaletteToComponents(pal)
         const palRes = theme.touch(pal.name)
         palRes.attach( mapColors(res.tiles.img, originalRGB, palRGB), 'tiles' )
         res.img._ls.forEach(img => {

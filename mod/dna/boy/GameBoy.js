@@ -3,16 +3,22 @@ let id = 0
 class GameBoy extends LabFrame {
 
     constructor(st) {
-        super( extend({
-            name: 'gameboy' + (++id),
-            pal: new dna.boy.Palette(),
-            framebuffer: document.createElement('canvas'),
-            pixelbuffer: document.createElement('canvas'),
-            fw: env.cfg.width,
-            fh: env.cfg.height,
-            itheme: 0,
-        }, st) )
-        extend(this, dna.trait.drawable)
+        super( extend(
+            {},
+            dna.trait.drawable,
+            {
+                name: 'gameboy' + (++id),
+                pal: new dna.boy.Palette(),
+                framebuffer: document.createElement('canvas'),
+                pixelbuffer: document.createElement('canvas'),
+                fw: env.cfg.width,
+                fh: env.cfg.height,
+                hw: env.cfg.width  * .5,
+                hh: env.cfg.height * .5,
+                itheme: 0,
+                bx:     0,
+                by:     0,
+            }, st) )
 
         this.framebuffer.width  = this.fw
         this.framebuffer.height = this.fh 
@@ -125,14 +131,16 @@ class GameBoy extends LabFrame {
         })
 
         this.port = this.screen.spawn(dna.space.Camera)
+        this.port.x = 40
+        this.port.y = 31
 
         this.screenController.hideAll()
         this.screenController.show('roll')
     }
 
-    onAttached(e) {
-        e.$   = this
-        e.ctx = this.ctx
+    translate(bx, by) {
+        this.bx = bx
+        this.by = by
     }
 
     draw() {
@@ -157,19 +165,25 @@ class GameBoy extends LabFrame {
         blocky()
         image(this.framebuffer, x, y, w, h)
 
+        /*
         let py = 16
         for (let px = 0; px < 160; px ++) {
-            const sh = (py * 160 + px) * 4
-            this.pdata.data[sh]   = 255
-            this.pdata.data[sh+1] = 255
-            this.pdata.data[sh+2] = 255
-            this.pdata.data[sh+3] = 255
+            const b = (py * 160 + px) * 4
+            this.pdata.data[b]   = 255
+            this.pdata.data[b+1] = 255
+            this.pdata.data[b+2] = 255
+            this.pdata.data[b+3] = 255
         }
         this.drawLine(20, 20, 25, 40, 1)
-        this.drawLine(20, 20, 10, 10, 1)
-        this.drawCircle(40, 40, 10, 1)
-
+        this.drawLine(20, 20, 10, 10, 2)
+        this.drawCircle(40, 40, 10, 3)
+        */
         this.pctx.putImageData(this.pdata, 0, 0)
         image(this.pixelbuffer, x, y, w, h)
+    }
+
+    onAttached(e) {
+        e.$   = this
+        e.ctx = this.ctx
     }
 }

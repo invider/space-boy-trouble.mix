@@ -1,9 +1,13 @@
 function putPixel(x, y, icolor) {
+    x = floor(x - this.bx + this.hw)
+    y = floor(y - this.by + this.hh)
+    if (x < 0 || x >= this.fw || y < 0 || y >= this.fh) return
     const b = (y * env.cfg.width + x) * 4
+    const c = this.pal.toColorArray(icolor || 0)
     // TODO get color array by index
-    this.pdata.data[b]   = 255
-    this.pdata.data[b+1] = 255
-    this.pdata.data[b+2] = 255
+    this.pdata.data[b]   = c[0]
+    this.pdata.data[b+1] = c[1]
+    this.pdata.data[b+2] = c[2]
     this.pdata.data[b+3] = 255
 }
 
