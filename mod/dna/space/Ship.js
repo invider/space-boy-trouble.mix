@@ -24,7 +24,7 @@ class Ship {
     }
 
     evo(dt) {
-        this.port.statusBar.show('mt.fwd: ' + round(this.mt.forward * 100)/100)
+        //this.port.statusBar.show('mt.fwd: ' + round(this.mt.forward * 100)/100)
 
         if (this.mt.left) {
             this.dir -= this.stats.turnSpeed * dt
@@ -64,11 +64,13 @@ class Ship {
               v2 = this.gxy(-this.r, -this.r*.5),
               v3 = this.gxy(-this.r,  this.r*.5)
 
+
         $.drawCircle(this.x, this.y, this.r, 1)
 
-        $.drawLine(v2[0], v2[1], v1[0], v1[1], 1)
-        $.drawLine(v3[0], v3[1], v1[0], v1[1], 1)
-        $.drawLine(v2[0], v2[1], v3[0], v3[1], 1)
+        $.drawLine(v2[0], v2[1], v1[0], v1[1], 2)
+        $.drawLine(v3[0], v3[1], v1[0], v1[1], 2)
+        $.drawLine(v2[0], v2[1], v3[0], v3[1], 2)
+
     }
 
     activate(action) {
