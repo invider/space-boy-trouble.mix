@@ -23,6 +23,14 @@ class Ship {
         this.r2 = this.r * 2
     }
 
+    shoot() {
+        this.__.spawn(new dna.space.Laser({
+            x:   this.x,
+            y:   this.y,
+            dir: this.dir,
+        }))
+    }
+
     evo(dt) {
         //this.port.statusBar.show('mt.fwd: ' + round(this.mt.forward * 100)/100)
 
@@ -70,7 +78,6 @@ class Ship {
         $.drawLine(v2[0], v2[1], v1[0], v1[1], 2)
         $.drawLine(v3[0], v3[1], v1[0], v1[1], 2)
         $.drawLine(v2[0], v2[1], v3[0], v3[1], 2)
-
     }
 
     activate(action) {
@@ -84,6 +91,9 @@ class Ship {
                 break
             case env.bind.RIGHT:
                 this.mt.right = 1
+                break
+            case env.bind.A:
+                this.shoot()
                 break
         }
     }
