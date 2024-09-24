@@ -1,34 +1,54 @@
 class Ship {
 
     constructor(st) {
-        extend(this, {
-            team: 0,
-            x:    0,
-            y:    0,
-            r:    8,
+        extend(
+            this,
+            dna.space.trait.directional,
+            {
+                team: 0,
+                x:    0,
+                y:    0,
+                r:    8,
+                R:    7,
+                dir:  0,
+                mt: {
+                    left:  0,
+                    right: 0,
+                    forward: 0,
+                },
 
-            dir:  0,
-            mt: {
-                left:  0,
-                right: 0,
-                forward: 0,
+                hits: 100,
+
+                stats: {
+                    turnSpeed:    PI,
+                    acceleration: 40,
+                    deceleration: 80,
+                    maxSpeed:     40,
+                },
             },
-            stats: {
-                turnSpeed:    PI,
-                acceleration: 40,
-                deceleration: 80,
-                maxSpeed:     40,
-            },
-        }, st)
+            st,
+        )
         this.r2 = this.r * 2
     }
 
     shoot() {
-        this.__.spawn(new dna.space.Laser({
-            x:   this.x,
-            y:   this.y,
+        const origin = this.gxy(this.r * 1.3, 0)
+        this.__.spawn(dna.space.Laser, {
+            src: this,
+            x:   origin[0],
+            y:   origin[1],
             dir: this.dir,
-        }))
+        })
+    }
+
+    damage(amount) {
+        this.hits -= amount
+        if (this.hits < 0) this.destroy()
+    }
+
+    destroy() {
+        kill(this)
+        // TODO particle effect of some sort
     }
 
     evo(dt) {
@@ -54,13 +74,6 @@ class Ship {
         }
     }
 
-    gxy(lx, ly) {
-        return [
-            this.x + lx * cos(this.dir) - ly * sin(this.dir),
-            this.y + lx * sin(this.dir) + ly * cos(this.dir)
-        ]
-    }
-
     draw(ctx, $) {
         //ctx.save()
         //ctx.imageSmoothingEnabled = false
@@ -73,7 +86,7 @@ class Ship {
               v3 = this.gxy(-this.r,  this.r*.5)
 
 
-        $.drawCircle(this.x, this.y, this.r, 1)
+        $.drawCircle(this.x, this.y, this.R, 1)
 
         $.drawLine(v2[0], v2[1], v1[0], v1[1], 2)
         $.drawLine(v3[0], v3[1], v1[0], v1[1], 2)

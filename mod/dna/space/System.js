@@ -7,6 +7,10 @@ class System extends LabFrame {
         }, st) )
     }
 
+    init() {
+        this.spawn('space/Collider')
+    }
+
     draw(ctx, $) {
         const ls = this._ls, N = ls.length
         for (let i = 0; i < N; i++) {

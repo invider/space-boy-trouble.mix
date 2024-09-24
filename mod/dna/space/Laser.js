@@ -1,23 +1,25 @@
 class Laser {
 
     constructor(st) {
-        extend(this, {
-            x:   0,
-            y:   0,
-            r:   10,
-            dir: 0,
-            lifespan: 10,
-            spec: {
-                speed: 25,
+        extend(
+            this,
+            dna.space.trait.directional,
+            {
+                x:   0,
+                y:   0,
+                r:   5,
+                R:   5,
+                dir: 0,
+                lifespan: 5,
+                spec: {
+                    speed:  60,
+                    damage: 10,
+                },
             },
-        }, st)
-    }
+            st
+        )
 
-    gxy(lx, ly) {
-        return [
-            this.x + lx * cos(this.dir) - ly * sin(this.dir),
-            this.y + lx * sin(this.dir) + ly * cos(this.dir)
-        ]
+        console.dir(this)
     }
 
     evo(dt) {
@@ -33,7 +35,13 @@ class Laser {
     draw(ctx, $) {
         const v1 = this.gxy( this.r, 0),
               v2 = this.gxy(-this.r, 0)
-        $.drawCircle(this.x, this.y, this.r, 1)
         $.drawLine(v1[0], v1[1], v2[0], v2[1], 2)
+    }
+
+    onHit(e) {
+        if (!(e instanceof dna.space.Ship) || this.src === e) return
+        log(`${e.name}/${e.hits}: HIT by a laser!`)
+        e.damage(this.spec.damage)
+        kill(this)
     }
 }
