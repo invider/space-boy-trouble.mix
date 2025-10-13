@@ -31,7 +31,7 @@ class Camera {
 
     evo(dt) {
         if (!this.target) return
-        const d = this.distToTarget = dist(this.target.x, this.target.y, this.x, this.y)
+        const d = this.distToTarget = distance(this.target.x, this.target.y, this.x, this.y)
         const dir = this.dir = bearing(this.x, this.y, this.target.x, this.target.y)
         if (d > this.spec.movementTrigger) {
             this.mt.dir = dir

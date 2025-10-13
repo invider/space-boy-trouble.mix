@@ -1,4 +1,5 @@
 function newGame(st) {
+    /*
     const playerA = lab.spawn(dna.Player, {
         name: 'playerA',
         title: 'Player A',
@@ -17,4 +18,5 @@ function newGame(st) {
     playerA.next = playerB
 
     trap('layout', playerA)
+    */
 }

@@ -16,7 +16,7 @@ module.exports = function() {
     //lib.gen.screen()
     //lib.util.hideCursor()
 
-    lab.screen.hideAll()
+    lab.control.screen.hideAll()
 
     /*
     if (!lib.debug.hyperjump()) {
