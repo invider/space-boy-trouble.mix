@@ -3,7 +3,7 @@ function newGame() {
 
     // TODO clear the old space if needed?
     // ...
-    lab.space.killAll()
+    lab.space.apply(e => e.killAll())
     lab.space.link(dna.collider)
     
     log('creating system zero...')

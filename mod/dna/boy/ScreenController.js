@@ -7,7 +7,13 @@ class ScreenController {
     }
 
     hideAll() {
-        this.__.screen._ls.forEach(screen => screen.hide())
+        this.__.screen._ls.forEach(screen => {
+            if (isFun(screen.hide)) {
+                screen.hide()
+            } else {
+                screen.hidden = true
+            }
+        })
     }
 
     show(name) {

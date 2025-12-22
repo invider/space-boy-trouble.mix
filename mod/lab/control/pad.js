@@ -20,7 +20,7 @@ function evo(dt) {
     pad().forEach(d => {
         const id = d.index + 1
 
-        if (id > 4) return
+        if (id < 1 || id > 4) return
         if (!bind[id]) {
             bind[id] = {}
             log(`registering gamepad #${id}:`)
@@ -28,7 +28,7 @@ function evo(dt) {
         }
 
         const p = lab.control.controller
-        const b = env.bind.padMap[id]
+        const b = env.bind.padMap[id - 1]
 
         // directional controls
         let x = d.axes[0] || d.axes[2]

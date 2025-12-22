@@ -1,5 +1,8 @@
 let id = 0
 
+/*
+ * Framebuffer is used to draw with canvas, pixelbuffer - for pixel-data drawing
+ */
 class GameBoy extends LabFrame {
 
     constructor(st) {
@@ -25,8 +28,11 @@ class GameBoy extends LabFrame {
         this.pixelbuffer.width  = this.fw
         this.pixelbuffer.height = this.fh
 
-        //this.ctx = this.framebuffer.getContext('2d', { alpha: false })
-        const ctx = this.ctx = this.framebuffer.getContext('2d')
+        const ctx = this.ctx = this.framebuffer.getContext('2d', {
+        //    alpha:     true,
+        //    antialias: false,
+        })
+
         this.pctx = this.pixelbuffer.getContext('2d', {
             willReadFrequently: true,
         })
@@ -39,10 +45,12 @@ class GameBoy extends LabFrame {
     }
 
     init() {
+        // create screen frame
         this.touch('screen', {
-            onAttached: function(e) {
-                e.$   = this.$
-                e.ctx = this.ctx
+            onAttach: function(e) {
+                e.$    = this.$
+                e.ctx  = this.ctx
+                e.pctx = this.pctx
                 supplement(e, dna.trait.hidable)
             }
         })
@@ -186,8 +194,9 @@ class GameBoy extends LabFrame {
         image(this.pixelbuffer, x, y, w, h)
     }
 
-    onAttached(e) {
-        e.$   = this
-        e.ctx = this.ctx
+    onAttach(e) {
+        e.$    = this
+        e.ctx  = this.ctx
+        e.pctx = this.pctx
     }
 }
