@@ -94,7 +94,7 @@ function action(i) {
 
 function pinActions() {
     actions.forEach( (action, i) => {
-        _[action] = i
+        $[action] = i
     })
 }
 

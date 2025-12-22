@@ -3,7 +3,7 @@ module.exports = function() {
     //lib.util.loadConfig()
 
     // patches
-    _$.boy = _ // set the gameboy mix shortcut ??? We want to have multiple gameboys
+    $.boy = __$ // set the gameboy mix shortcut ??? We want to have multiple gameboys
     $.sys.cp('/res', '/space-boy/res')
 
     // res.pods.drawImage = image
@@ -16,7 +16,9 @@ module.exports = function() {
     //lib.gen.screen()
     //lib.util.hideCursor()
 
-    lab.screen.hideAll()
+    lab.screen.apply(e => {
+        if(isFun(e.hide)) e.hide()
+    })
 
     /*
     if (!lib.debug.hyperjump()) {
